@@ -5,7 +5,7 @@ Documentation for the libuci c interface
 
 __Purpose__: Allocate a new UCI context
 
-## `void uci_free_context(struct uci_context *ctx)`
+### `void uci_free_context(struct uci_context *ctx)`
 
 __Purpose__: Free the allocated UCI context, including all of its data
 
@@ -15,7 +15,7 @@ __Purpose__: Free the allocated UCI context, including all of its data
 | -------- | ----------- |
 | `uci_context` | the uci context to be deallocated |
 
-## `void uci_perror(struct uci_context *ctx, const char *str)`
+### `void uci_perror(struct uci_context *ctx, const char *str)`
 
 __Purpose__: Print the last uci error that occured
 
@@ -26,7 +26,7 @@ __Purpose__: Print the last uci error that occured
 | `ctx` | the uci context |
 | `str` | string to print before the error message |
 
-## `void uci_get_errorstr(struct uci_context *ctx, char **dest, const char *str)`
+### `void uci_get_errorstr(struct uci_context *ctx, char **dest, const char *str)`
 
 __Purpose__: Get an error string for the last uci error
 
@@ -40,7 +40,7 @@ __Purpose__: Get an error string for the last uci error
 
 __Note__: string must be freed by the caller
 
-## `int uci_import(struct uci_context *ctx, FILE *stream, const char *name, struct uci_package **package, bool single)`
+### `int uci_import(struct uci_context *ctx, FILE *stream, const char *name, struct uci_package **package, bool single)`
 
 __Purpose__: Import uci config data from a stream
 
@@ -59,7 +59,7 @@ __Purpose__: Import uci config data from a stream
 - The name parameter is for config files that don't explicitly use the 'package <...>' keyword
 - if 'package' points to a non-null struct pointer, enable delta tracking and merge
 
-## `int uci_export(struct uci_context *ctx, FILE *stream, struct uci_package *package, bool header)`
+### `int uci_export(struct uci_context *ctx, FILE *stream, struct uci_package *package, bool header)`
 
 __Purpose__: Export one or all uci config packages
 
