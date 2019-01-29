@@ -1,7 +1,7 @@
 # LibUCI-Documentation
 Documentation for the libuci c interface
 
-## `struct uci_context *uci_alloc_context(void)`
+### `struct uci_context *uci_alloc_context(void)`
 
 __Purpose__: Allocate a new UCI context
 
@@ -224,6 +224,205 @@ __Purpose__: commit changes to a package
 ##### Notes
 
 - Committing may reload the whole uci_package data, the supplied pointer is updated accordingly
+
+### `int uci_list_configs(struct uci_context *ctx, char ***list)`
+
+__Purpose__: List available uci config files
+
+#### Arguments
+
+| Argument | Description |
+| -------- | ----------- |
+| `ctx` | the uci context |
+| `list` | pointer to list output |
+
+##### Notes
+
+- Caller is responsible for freeing the allocated memory behind list
+
+### `int uci_set_savedir(struct uci_context *ctx, const char *dir)`
+
+__Purpose__: override the default delta save directory
+
+#### Arguments
+
+| Argument | Description |
+| -------- | ----------- |
+| `ctx` | the uci context |
+| `dir` | directory name |
+
+### `int uci_add_delta_path(struct uci_context *ctx, const char *dir)`
+
+__Purpose__: add a directory to the search path for change delta files
+
+#### Arguments
+
+| Argument | Description |
+| -------- | ----------- |
+| `ctx` | the uci context |
+| `dir` | directory name |
+
+##### Notes
+
+- This function allows you to add directories, which contain 'overlays' for the active config, that will never be committed.
+
+### `int uci_revert(struct uci_context *ctx, struct uci_ptr *ptr)`
+
+__Purpose__: revert all changes to a config item
+
+#### Arguments
+
+| Argument | Description |
+| -------- | ----------- |
+| `ctx` | the uci context |
+| `ptr` | uci pointer |
+
+### `int uci_parse_argument(struct uci_context *ctx, FILE *stream, char **str, char **result)`
+
+__Purpose__: parse a shell-style argument, with an arbitrary quoting style
+
+#### Arguments
+
+| Argument | Description |
+| -------- | ----------- |
+| `ctx` | the uci context |
+| `stream` | input stream |
+| `str` | pointer to the current line (use NULL for parsing the next line) |
+| `result` | pointer for the result |
+
+### `int uci_set_backend(struct uci_context *ctx, const char *name)`
+
+__Purpose__: change the default backend
+
+#### Arguments
+
+| Argument | Description |
+| -------- | ----------- |
+| `ctx` | the uci context |
+| `name` | name of the backend |
+
+##### Notes
+
+- The default backend is "file", which uses /etc/config for config storage
+
+### `bool uci_validate_text(const char *str)`
+
+__Purpose__: validate a value string for uci options
+
+#### Arguments
+
+| Argument | Description |
+| -------- | ----------- |
+| `str` | the string to be validated |
+
+### `int uci_add_hook(struct uci_context *ctx, const struct uci_hook_ops *ops)`
+
+__Purpose__: add a uci hook
+
+#### Arguments
+
+| Argument | Description |
+| -------- | ----------- |
+| `ctx` | the uci context |
+| `ops` | uci hook ops |
+
+### `int uci_remove_hook(struct uci_context *ctx, const struct uci_hook_ops *ops)`
+
+__Purpose__: remove a uci hook
+
+#### Arguments
+
+| Argument | Description |
+| -------- | ----------- |
+| `ctx` | the uci context |
+| `ops` | uci hook ops |
+
+### `int uci_load_plugin(struct uci_context *ctx, const char *filename)`
+
+__Purpose__: load an uci plugin
+
+#### Arguments
+
+| Argument | Description |
+| -------- | ----------- |
+| `ctx` | the uci context |
+| `filename` | path to the uci plugin |
+
+##### Notes
+
+- plugin will be unloaded automatically when the context is freed
+
+### `int uci_load_plugins(struct uci_context *ctx, const char *pattern)`
+
+__Purpose__: Load all plugins from a directory
+
+#### Arguments
+
+| Argument | Description |
+| -------- | ----------- |
+| `ctx` | the uci context |
+| *optional*: `filename` | pattern of uci plugin files |
+
+##### Notes
+
+- if pattern is NULL, then uci_load_plugins will call uci_load_plugin for uci_*.so in <prefix>/lib/
+  
+### `int uci_parse_ptr(struct uci_context *ctx, struct uci_ptr *ptr, char *str)`
+
+__Purpose__: parse a uci string into a uci_ptr
+
+#### Arguments
+
+| Argument | Description |
+| -------- | ----------- |
+| `ctx` | the uci context |
+| `ptr` | target data structure |
+| `str` | string to parse |
+
+##### Notes
+
+- `str` is modified by this call
+
+### `int uci_lookup_next(struct uci_context *ctx, struct uci_element **e, struct uci_list *list, const char *name)`
+
+__Purpose__: lookup a child element
+
+#### Arguments
+
+| Argument | Description |
+| -------- | ----------- |
+| `ctx` | the uci context |
+| `e` | target element pointer |
+| `list` | list of elements |
+| `name` | name of the child element | 
+
+##### Notes
+
+- if parent is NULL, the function looks up the package with the given name
+
+### `void uci_parse_section(struct uci_section *s, const struct uci_parse_option *opts, int n_opts, struct uci_option **tb)`
+
+__Purpose__: look up a set of options
+
+#### Arguments
+
+| Argument | Description |
+| -------- | ----------- |
+| `ctx` | the uci context |
+| `opts` | list of options to look up |
+| `n_opts` | number of options to look up |
+| `tb` | array of pointers to found options |
+
+### `uint32_t uci_hash_options(struct uci_option **tb, int n_opts)`
+
+__Purpose__: build a hash over a list of options
+
+#### Arguments
+
+| Argument | Description |
+| -------- | ----------- |
+| `tb` | list of option pointers |
+| `n_opts` | number of options |
 
 #### This was built on top of http://technostuff.blogspot.com/2017/03/openwrt-modules-uci.html
 
